@@ -36,6 +36,7 @@ for channel in range(0,3):
     SensorNames.append(str(channel) + "-" + "0x6B")
 
 """
+Need to figure out why this doesnt seem to work, maybe there is a need to hardcode the address
 for channel in range(8):
     if tca[channel].try_lock():
         addresses = tca[channel].scan()
@@ -55,11 +56,11 @@ for name in SensorNames:
 time.sleep(2)
 
 #Try to collect data for first sensor
-
-sensor = SensorObjects[0]
-for i in range(20):
-    print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2" % (sensor.acceleration))
-    print("Gyro X:%.2f, Y: %.2f, Z: %.2f radians/s" % (sensor.gyro))
+for i in range(len(SensorObjects)):
+    sensor = SensorObjects[i]
+    print("Sensor " + str(i), end = "")
+    print("Accel: X:%.2f, Y: %.2f, Z: %.2f m/s^2" % (sensor.acceleration), end = "")
+    print("Gyro:  X:%.2f, Y: %.2f, Z: %.2f rad/s" % (sensor.gyro), end = "")
     print("")
     time.sleep(0.5)
 
