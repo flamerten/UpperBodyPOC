@@ -4,7 +4,7 @@
 import time
 
 from adafruit_lsm6ds import Rate, AccelRange, GyroRange
-from adafruit_lsm6ds import ISM330DHCT as Sensor
+from adafruit_lsm6ds.ism330dhcx import ISM330DHCX #refer to https://github.com/adafruit/Adafruit_CircuitPython_LSM6DS/blob/main/examples/lsm6ds_ism330dhcx_simpletest.py
 import adafruit_tca9548a
 import board
 import busio
@@ -22,20 +22,35 @@ trigger_status = False #initially system does not record unless pressed
 i2c = busio.I2C(board.SCL, board.SDA)
 tca = adafruit_tca9548a.TCA9548A(i2c)
 
-#Scan for the sensors connected and add it to the list
-sensors = []
+#Scan for the sensors connected and add the objects to the list
+SensorObjects = []
+SensorNames = []
 for channel in range(8):
     if tca[channel].try_lock():
         addresses = tca[channel].scan()
         for address in addresses:
-            if address != 0x70:
-                sensors.append(str(channel) + "-" + str(hex(address)))
+            if address == 0x6a or address == 0x6b: #6b when jumpers soldered, else 6b
+                Sensor = ISM330DHCX(tca[channel],address)
+                SensorObjects.append(str(Sensor))
+                SensorNames.append(str(channel) + "-" + str(hex(address)))
         tca[channel].unlock()
 
 
 print("Sensors connected to TCA")
-for sensor in sensors:
-    print(sensor)
+for name in SensorNames:
+    print(name)
+
+time.sleep(2)
+
+#Try to collect data for first sensor
+
+sensor = SensorObjects[0]
+for i in range(20):
+    print("Acceleration: X:%.2f, Y: %.2f, Z: %.2f m/s^2" % (sensor.acceleration))
+    print("Gyro X:%.2f, Y: %.2f, Z: %.2f radians/s" % (sensor.gyro))
+    print("")
+    time.sleep(0.5)
+
 
 #while(trigger.value == 0):
 #    time.sleep(0.1)
