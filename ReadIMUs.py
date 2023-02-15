@@ -25,6 +25,17 @@ tca = adafruit_tca9548a.TCA9548A(i2c)
 #Scan for the sensors connected and add the objects to the list
 SensorObjects = []
 SensorNames = []
+
+for channel in range(0,3):
+    Sensor1 = ISM330DHCX(tca[channel],address = const(0x6A))
+    Sensor2 = ISM330DHCX(tca[channel],address = const(0x6B))
+
+    SensorObjects.append(Sensor1)
+    SensorObjects.append(Sensor2)
+    SensorNames.append(str(channel) + "-" + "0x6A")
+    SensorNames.append(str(channel) + "-" + "0x6B")
+
+"""
 for channel in range(8):
     if tca[channel].try_lock():
         addresses = tca[channel].scan()
@@ -34,6 +45,7 @@ for channel in range(8):
                 SensorObjects.append(str(Sensor))
                 SensorNames.append(str(channel) + "-" + str(hex(address)))
         tca[channel].unlock()
+"""
 
 
 print("Sensors connected to TCA")
