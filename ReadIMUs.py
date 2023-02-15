@@ -42,11 +42,11 @@ def CalibrateSensors(SensorObjects):
     count = 30
     no_sensors = 6
     #Calculate gyro offsets and add it to a npy file
-    Offsets = np.zeros(6 * no_sensors)
+    Offsets = np.zeros(3 * no_sensors)
     for i in range(count):
         res = ()
         for Sensor in SensorObjects:
-            res = res + Sensor.acceleration + Sensor.gyro
+            res = res + Sensor.gyro
 
         print(i,res)
         Offsets = Offsets + np.array(res)
