@@ -13,6 +13,9 @@ import digitalio
 from micropython import const
 from adafruit_bus_device.i2c_device import I2CDevice
 
+Comp_Freq = 40 #Hz > reco based on no. sensors
+Sample_Delay = 1/40
+
 BUTTON = board.D21
 
 trigger = digitalio.DigitalInOut(BUTTON)
@@ -25,9 +28,25 @@ tca = adafruit_tca9548a.TCA9548A(i2c)
 
 
 def RecordSensors():
-    #Scan for the sensors connected and add the objects to the list
+    #Scan for the sensors connected and return a list of Sensor Objects
     SensorObjects = []
     SensorNames = [] #useful for debugging
+    for channel in range(8):
+        if tca[channel].try_lock():
+            addresses = tca[channel].scan()
+            for addr in addresses:
+                print(str(channel)+":"+str(hex(addr)) + "found")
+                if addr != 0x70:
+                    Sensor = ISM330DHCX(tca[channel],address = const(hex(addr)))
+                    SensorObjects.append(Sensor)
+                    SensorNames.append(str(channel) + "-" + str(hex(addr)))
+
+    for n in SensorNames:
+        print(n)
+    
+    return SensorObjects
+
+"""
     for channel in range(0,3):
         Sensor1 = ISM330DHCX(tca[channel],address = const(0x6A))
         Sensor2 = ISM330DHCX(tca[channel],address = const(0x6B))
@@ -36,9 +55,10 @@ def RecordSensors():
         SensorObjects.append(Sensor2)
         SensorNames.append(str(channel) + "-" + "0x6A")
         SensorNames.append(str(channel) + "-" + "0x6B")
-    return SensorObjects
+"""
 
 def CalibrateSensors(SensorObjects):
+    #move this to a helper file?
     count = 30
     no_sensors = 6
     #Calculate gyro offsets and add it to a npy file
@@ -50,7 +70,7 @@ def CalibrateSensors(SensorObjects):
 
         print(i,res)
         Offsets = Offsets + np.array(res)
-        time.sleep(0.5)
+        time.sleep(Sample_Delay)
     
     Offsets = Offsets/count #divide by the average
     print("Gyro offset calculation")
@@ -72,7 +92,7 @@ for i in range(len(SensorObjects)):
     print("")
     time.sleep(0.5)
 
-CalibrateSensors(SensorObjects)
+#CalibrateSensors(SensorObjects)
 
 
 #while(trigger.value == 0):
