@@ -31,22 +31,7 @@ def RecordSensors():
     #Scan for the sensors connected and return a list of Sensor Objects
     SensorObjects = []
     SensorNames = [] #useful for debugging
-    for channel in range(8):
-        if tca[channel].try_lock():
-            addresses = tca[channel].scan()
-            for addr in addresses:
-                print(str(channel)+":"+str(hex(addr)) + "found")
-                if addr != 0x70:
-                    Sensor = ISM330DHCX(tca[channel],address = const(hex(addr)))
-                    SensorObjects.append(Sensor)
-                    SensorNames.append(str(channel) + "-" + str(hex(addr)))
 
-    for n in SensorNames:
-        print(n)
-    
-    return SensorObjects
-
-"""
     for channel in range(0,3):
         Sensor1 = ISM330DHCX(tca[channel],address = const(0x6A))
         Sensor2 = ISM330DHCX(tca[channel],address = const(0x6B))
@@ -55,7 +40,8 @@ def RecordSensors():
         SensorObjects.append(Sensor2)
         SensorNames.append(str(channel) + "-" + "0x6A")
         SensorNames.append(str(channel) + "-" + "0x6B")
-"""
+
+    return SensorObjects
 
 def CalibrateSensors(SensorObjects):
     #move this to a helper file?
