@@ -14,8 +14,6 @@ from micropython import const
 from adafruit_bus_device.i2c_device import I2CDevice
 import os
 
-import archive.helper as h
-
 #Wiring - maybe should import it instead if here
 #rot_type, label, tca channel + i2c option
 sensor_map = (
