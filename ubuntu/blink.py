@@ -5,7 +5,7 @@
 import time
 import lgpio
 
-LED = 23
+LED = 17
 
 # open the gpio chip and set the LED pin as output
 h = lgpio.gpiochip_open(0)
