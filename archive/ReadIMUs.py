@@ -40,11 +40,16 @@ calibrate_sensors = True
 
 
 BUTTON = board.D21
+LED = board.D20
 
 trigger = digitalio.DigitalInOut(BUTTON)
 trigger.direction = digitalio.Direction.INPUT
 trigger.pull = digitalio.Pull.DOWN
 trigger_status = False #initially system does not record unless pressed
+
+led = digitalio.DigitalInOut(LED)
+led.direction = digitalio.Direction.OUTPUT
+led.value = True #turn on led
 
 i2c = busio.I2C(board.SCL, board.SDA)
 tca = adafruit_tca9548a.TCA9548A(i2c)
@@ -139,6 +144,15 @@ def calibrating_sensors(cal_dir, gyro_file, rate, sensor_list, calibration_time=
     gyro_offset = -1.0*np.mean(cal_data,axis=0)
     np.save(cal_dir+gyro_file, gyro_offset)
 
+
+print("Functions initialised, waiting for button press")
+while(trigger.value == 0):
+    time.sleep(0.1)
+
+led.value = False #turn off when starting
+
+print("Starting IMU data collection")
+
 SensorObjects = RecordSensors()
 
 time.sleep(2)
@@ -152,8 +166,9 @@ for i in range(len(SensorObjects)):
     print("")
     time.sleep(0.5)
 
+print("END")
+
 #CalibrateSensors(SensorObjects)
 
 
-#while(trigger.value == 0):
-#    time.sleep(0.1)
+
