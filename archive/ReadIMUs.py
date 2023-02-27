@@ -50,7 +50,7 @@ i2c = busio.I2C(board.SCL, board.SDA)
 tca = adafruit_tca9548a.TCA9548A(i2c)
 
 
-def RecordSensors(init_time,signals_per_sensor,home_dir):
+def RecordSensors():
     """
     Based on ReadIMU function in the workers.py file
     """
@@ -104,16 +104,10 @@ def RecordSensors(init_time,signals_per_sensor,home_dir):
     # load fake data and figure out number of sensors
 
     "Need to figure out what is init_time and signals per sensor(i think this is 6)"
-
-    quat_cal_offset = int(init_time*rate) # array for data for calibrating sensors
     #cwd = os.getcwd() cwd does not seem to be used
-    sensor_vec = np.zeros(num_sensors*signals_per_sensor)
-    scaling = np.ones(num_sensors*signals_per_sensor)
-    offsets = np.zeros(num_sensors*signals_per_sensor)
-    imu_data = np.zeros((quat_cal_offset, num_sensors*signals_per_sensor))
-    fake_data_len = 0
 
-    cal_dir = home_dir+'calibration'
+
+    cal_dir = os.getcwd()+'calibration'
     gyro_file = '/gyro_offsets.npy'
     if calibrate_sensors or not os.path.exists(cal_dir): # also check if calibration folder exists, else create dir and calibrate
         print("Calibrating sensors!")
@@ -143,7 +137,7 @@ def calibrating_sensors(cal_dir, gyro_file, rate, sensor_list, calibration_time=
     gyro_offset = -1.0*np.mean(cal_data,axis=0)
     np.save(cal_dir+gyro_file, gyro_offset)
 
-SensorObjects = RecordSensors()
+SensorObjects = RecordSensors(time.time(), 6,)
 
 time.sleep(2)
 
