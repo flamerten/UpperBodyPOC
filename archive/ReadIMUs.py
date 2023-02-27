@@ -107,7 +107,7 @@ def RecordSensors():
     #cwd = os.getcwd() cwd does not seem to be used
 
 
-    cal_dir = os.getcwd()+'calibration'
+    cal_dir = os.getcwd()+'/calibration'
     gyro_file = '/gyro_offsets.npy'
     if calibrate_sensors or not os.path.exists(cal_dir): # also check if calibration folder exists, else create dir and calibrate
         print("Calibrating sensors!")
