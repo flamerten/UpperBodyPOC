@@ -73,7 +73,7 @@ def RecordSensors():
         Row_BodyPart_Name = row[1]
         Row_Rot_Type = row[0]
 
-        if Row_Channel_I2C != 9:
+        if Row_Channel_I2C != '9':
             channel = int(Row_Channel_I2C[0])
             if len(Row_Channel_I2C) > 1:
                 Sensor = ISM330DHCX(tca[channel],address = const(0x6B))
@@ -114,10 +114,12 @@ def RecordSensors():
         try: # create calibration dir
             os.makedirs(cal_dir)
         except:
+            print("Unable to make caibration directory")
             pass
         calibrating_sensors(cal_dir, gyro_file, rate, sensor_list)
     
     offsets = np.load(cal_dir+gyro_file)# loading calibration vec
+    return sensor_list
 
 def calibrating_sensors(cal_dir, gyro_file, rate, sensor_list, calibration_time=10.0, signals_per_sensor=6):
     dt = 1/rate
