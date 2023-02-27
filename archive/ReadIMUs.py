@@ -69,9 +69,9 @@ def RecordSensors():
 
     for row in sensor_map:
         
-        Row_Channel_I2C = row[3]
+        Row_Channel_I2C = row[2]
         Row_BodyPart_Name = row[1]
-        Row_Rot_Type = row[2]
+        Row_Rot_Type = row[0]
 
         if Row_Channel_I2C != 9:
             channel = int(Row_Channel_I2C[0])
@@ -137,7 +137,7 @@ def calibrating_sensors(cal_dir, gyro_file, rate, sensor_list, calibration_time=
     gyro_offset = -1.0*np.mean(cal_data,axis=0)
     np.save(cal_dir+gyro_file, gyro_offset)
 
-SensorObjects = RecordSensors(time.time(), 6,)
+SensorObjects = RecordSensors()
 
 time.sleep(2)
 
