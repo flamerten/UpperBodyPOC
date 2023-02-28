@@ -253,7 +253,7 @@ def readIMU(q, b, fake_online_data, init_time, signals_per_sensor, save_dir_init
             clear_button(button)
             while(True): # Pull data at the desired rate
                 cur_time = time.time()
-                if cur_time >= time_start + dt: # time for next reading
+                if cur_time >= time_start + dt: #Use dt to wait for the next sensor read
                     pressed, last_pressed = check_button(button, last_pressed)
                     if trigger_status: # trigger was engaged
                         if not trigger.value: # the external signal is now low (0V), stop recording
@@ -269,6 +269,9 @@ def readIMU(q, b, fake_online_data, init_time, signals_per_sensor, save_dir_init
                         break
                     time_start = cur_time
                     for j, s in enumerate(sensor_list):
+                        # Pull sensor data here directly using the Sensor object 
+                        # -> Get s.acceleration and s.gyro
+
                         s_off = j*signals_per_sensor
                         sensor_vec[s_off:s_off+3] = s.acceleration
                         sensor_vec[s_off+3:s_off+6] = s.gyro

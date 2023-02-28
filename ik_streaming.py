@@ -71,7 +71,6 @@ while(script_live):
     visualize_init = False
     sensor_to_opensim_rotations = Vec3(-np.pi/2,head_err,0)
 
-    #Need to check on why there are these ";" here
     imuPlacer = osim.IMUPlacer()
     imuPlacer.set_model_file(uncal_model_filename)
     imuPlacer.set_orientation_file_for_calibration(sto_filename)
@@ -150,10 +149,8 @@ while(script_live):
         orientationsData = osim.OpenSenseUtilities.convertQuaternionsToRotations(quatTable)
         rowVecView = orientationsData.getNearestRow(time_s)
         rowVec = osim.RowVectorRotation(rowVecView)
-        #ikSolver.addOrientationValuesToTrack(time_s+dt, rowVec)
-        print(time_s+dt)
-        print(rowVec)
-        ikSolver.computeCurrentOrientationErrors(time_s+dt, rowVec) #idk
+        ikSolver.addOrientationValuesToTrack(time_s+dt, rowVec)          #not found:  addOrientationValuesToTrack
+        #ikSolver.computeCurrentOrientationErrors(time_s+dt, rowVec)
         s0.setTime(time_s+dt)
         ikSolver.track(s0)
         if visualize:

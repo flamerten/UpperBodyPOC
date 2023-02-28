@@ -5,4 +5,3 @@ online
 debug
 300
 ISM330DHCX
-calibrate
