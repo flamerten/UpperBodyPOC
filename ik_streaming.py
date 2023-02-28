@@ -151,6 +151,8 @@ while(script_live):
         rowVecView = orientationsData.getNearestRow(time_s)
         rowVec = osim.RowVectorRotation(rowVecView)
         #ikSolver.addOrientationValuesToTrack(time_s+dt, rowVec)
+        print(time_s+dt)
+        print(rowVec)
         ikSolver.computeCurrentOrientationErrors(time_s+dt, rowVec) #idk
         s0.setTime(time_s+dt)
         ikSolver.track(s0)
