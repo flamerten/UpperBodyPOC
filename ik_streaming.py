@@ -149,8 +149,7 @@ while(script_live):
         orientationsData = osim.OpenSenseUtilities.convertQuaternionsToRotations(quatTable)
         rowVecView = orientationsData.getNearestRow(time_s)
         rowVec = osim.RowVectorRotation(rowVecView)
-        ikSolver.addOrientationValuesToTrack(time_s+dt, rowVec)          #not found:  addOrientationValuesToTrack
-        #ikSolver.computeCurrentOrientationErrors(time_s+dt, rowVec)
+        ikSolver.addOrientationValuesToTrack(time_s+dt, rowVec)
         s0.setTime(time_s+dt)
         ikSolver.track(s0)
         if visualize:
