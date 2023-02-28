@@ -25,7 +25,7 @@ real_time = True # set to True for using the kinematics in the python script for
 fake_real_time = False # True to run offline, False to record data and run online
 log_temp = True # True to log CPU temperature data
 log_data = True # if true save all IK outputs, else only use those in reporter_list for easier custom coding
-home_dir = '/home/pi/Desktop/UpperBodyPOC' # check home directory!!
+home_dir = '/home/ubuntu/UpperBodyPOC' # check home directory!!
 uncal_model = 'Rajagopal_2015.osim'
 uncal_model_filename = home_dir + uncal_model
 model_filename = home_dir+'calibrated_' + uncal_model
@@ -72,12 +72,12 @@ while(script_live):
     sensor_to_opensim_rotations = Vec3(-np.pi/2,head_err,0)
 
     #Need to check on why there are these ";" here
-    imuPlacer = osim.IMUPlacer();
-    imuPlacer.set_model_file(uncal_model_filename);
-    imuPlacer.set_orientation_file_for_calibration(sto_filename);
-    imuPlacer.set_sensor_to_opensim_rotations(sensor_to_opensim_rotations);
-    imuPlacer.run(visualize_init);
-    model = imuPlacer.getCalibratedModel();
+    imuPlacer = osim.IMUPlacer()
+    imuPlacer.set_model_file(uncal_model_filename)
+    imuPlacer.set_orientation_file_for_calibration(sto_filename)
+    imuPlacer.set_sensor_to_opensim_rotations(sensor_to_opensim_rotations)
+    imuPlacer.run(visualize_init)
+    model = imuPlacer.getCalibratedModel()
     model.printToXML(model_filename)
 
     # Initialize model
