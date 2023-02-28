@@ -104,7 +104,9 @@ while(script_live):
         model.setUseVisualizer(True)
     model.initSystem()
     s0 = init_state
-    ikSolver = osim.InverseKinematicsSolver(model, mRefs, oRefs, coordinateReferences, constraint_var)
+    ikSolver = osim.InverseKinematicsSolver(
+            model, mRefs, oRefs, coordinateReferences, np.float64(constraint_var))
+    #ikSolver = osim.InverseKinematicsSolver(model, mRefs, oRefs, coordinateReferences, constraint_var)
     ikSolver.setAccuracy = accuracy
     s0.setTime(0.)
     ikSolver.assemble(s0)
